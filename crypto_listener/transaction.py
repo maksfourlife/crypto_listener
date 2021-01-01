@@ -4,7 +4,8 @@ class Transaction:
         self.prev_state = None
         self.new_state = None
         self.error = {
-            "loading": False
+            "loading": False,
+            "tag": False
         }
         self._notification_queue = []
         self.chats = []

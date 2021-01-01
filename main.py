@@ -1,6 +1,5 @@
-from crypto_listener.bot import Bot
-
+from crypto_listener import CryptoListener
 
 if __name__ == "__main__":
-    bot = Bot()
-    bot.start()
+    app = CryptoListener()
+    app.start()
