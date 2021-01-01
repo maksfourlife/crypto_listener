@@ -4,17 +4,15 @@ import bs4
 
 class Listener:
     def __init__(self):
-        self.listen = {}
-        self.states = {}
+        self.transactions = {}
 
-    def track_updates(self):
-        for btc_key, btc in self.listen.items():
-            with requests.get(btc) as res:
+    def track_changes(self):
+        for hash_, transaction in self.listen.items():
+            with requests.get(transaction.hash_) as res:
                 if not res.ok:
-                    state = "error loading"
+                    transaction.error["loading"] = True
                 else:
+                    transaction.error["loading"] = False
                     soup = bs4.BeautifulSoup(res.content.decode("utf-8"))
                     state = soup.findAll(True, {"class": ["sc-45ldg2-0", "iA-DtFk"]})[0]
-            if btc_key not in self.states:
-                self.states[btc_key] = (None, None)
-            self.states[btc_key] = self.states[btc_key][1], state
+            transaction.update_state(state)
