@@ -6,6 +6,9 @@ class Transaction:
         self._notification_queue = []
         self.chats = set()
 
+    def count_notifications(self):
+        return len(self._notification_queue)
+
     def add_notification(self, message):
         self._notification_queue.append(message)
 
@@ -15,7 +18,7 @@ class Transaction:
 
     def update_state(self, state):
         self.prev_state, self.new_state = self.new_state, state
-        if self.prev_state != self.new_state and self.prev_state and self.new_state:
+        if self.prev_state != self.new_state:
             self._notification_queue.append(f"State: {self.new_state}")
 
     def __hash__(self):
