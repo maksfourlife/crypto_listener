@@ -14,7 +14,8 @@ class Listener:
 
     @staticmethod
     def _transaction_expired(transaction):
-        return transaction.new_state == "Confirmed" and transaction.count_notifications() == 0
+        return (transaction.new_state == "Confirmed" and transaction.count_notifications() == 0) or\
+               len(transaction.chats) == 0
 
     def _track_changes(self):
         while True:
@@ -24,7 +25,7 @@ class Listener:
                     continue
                 with requests.get(BASE_URL + self.transactions[hash_].hash_) as res:
                     try:
-                        soup = bs4.BeautifulSoup(res.content.decode("utf-8"))
+                        soup = bs4.BeautifulSoup(res.content.decode("utf-8"), features="html.parser")
                     except:
                         self.transactions[hash_].add_notification("Error: can't load transaction")
                         continue
