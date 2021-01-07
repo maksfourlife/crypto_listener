@@ -14,8 +14,10 @@ class Listener:
 
     @staticmethod
     def _transaction_expired(transaction):
-        return (transaction.new_state == "Confirmed" and transaction.count_notifications() == 0) or\
-               len(transaction.chats) == 0
+        return len(transaction.chats) == 0 or \
+               isinstance(transaction.new_state, str) and \
+               transaction.new_state.startswith("Confirmed") and \
+               transaction.count_notifications() == 0
 
     def _track_changes(self):
         while True:
@@ -30,10 +32,10 @@ class Listener:
                         self.transactions[hash_].add_notification("Error: can't load transaction")
                         continue
                 try:
-                    self.transactions[hash_].update_state(
-                        soup.findAll(True, {"class": ["sc-45ldg2-0", "iA-DtFk"]})[0].text)
+                    self.transactions[hash_].update_state(f"{soup.find(text='Status').next_element.text} "
+                                                          f"{soup.find(text='Confirmations').next_element.text}")
                 except:
-                    self.transactions[hash_].add_notification("Error: can't find state")
+                    self.transactions[hash_].add_notification("Error: can't find tag")
             time.sleep(self.update_rate)
 
     def start(self):
