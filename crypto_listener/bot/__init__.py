@@ -20,8 +20,8 @@ class Bot:
 
         self.updater.dispatcher.add_handler(CommandHandler("start", Commands.start))
         self.updater.dispatcher.add_handler(CommandHandler("stop", Commands.stop(self.transactions)))
-        self.updater.dispatcher.add_handler(CommandHandler("listen", Commands.listen(self.transactions)))
-        self.updater.dispatcher.add_handler(CommandHandler("unlisten", Commands.unlisten(self.transactions)))
+        self.updater.dispatcher.add_handler(CommandHandler("check", Commands.listen(self.transactions)))
+        self.updater.dispatcher.add_handler(CommandHandler("uncheck", Commands.unlisten(self.transactions)))
 
         Thread(target=self.notificate, name="bot_notificator", daemon=True).start()
 

@@ -29,13 +29,13 @@ class Listener:
                     try:
                         soup = bs4.BeautifulSoup(res.content.decode("utf-8"), features="html.parser")
                     except:
-                        self.transactions[hash_].add_notification("Error: can't load transaction")
+                        self.transactions[hash_].add_notification("[Error] can't load transaction")
                         continue
                 try:
                     self.transactions[hash_].update_state(f"{soup.find(text='Status').next_element.text} "
                                                           f"{soup.find(text='Confirmations').next_element.text}")
                 except:
-                    self.transactions[hash_].add_notification("Error: can't find tag")
+                    self.transactions[hash_].add_notification("[Error] can't find tag")
             time.sleep(self.update_rate)
 
     def start(self):
