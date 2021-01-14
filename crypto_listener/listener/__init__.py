@@ -25,12 +25,12 @@ class Listener:
                 if self._transaction_expired(self.transactions[hash_]):
                     del self.transactions[hash_]
                     continue
-                with requests.get(BASE_URL + self.transactions[hash_].hash_) as res:
-                    try:
+                try:
+                    with requests.get(BASE_URL + self.transactions[hash_].hash_) as res:
                         soup = bs4.BeautifulSoup(res.content.decode("utf-8"), features="html.parser")
-                    except:
-                        self.transactions[hash_].add_notification("[Error] can't load transaction")
-                        continue
+                except:
+                    self.transactions[hash_].add_notification("[Error] can't load transaction")
+                    continue
                 try:
                     self.transactions[hash_].update_state(f"{soup.find(text='Status').next_element.text} "
                                                           f"{soup.find(text='Confirmations').next_element.text}")
